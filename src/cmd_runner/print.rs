@@ -1,4 +1,5 @@
-// Builtin module for SBSH
+// Copyright (C) <2026> <Bogdan Yachmenv>
+// SPDX-License-Identifier: GPL-3.0/
 use std::env;
 
 pub fn print(args: Vec<String>) {

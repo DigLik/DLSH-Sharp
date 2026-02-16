@@ -1,3 +1,6 @@
+// Copyright (C) <2026> <Bogdan Yachmenv>
+// SPDX-License-Identifier: GPL-3.0/
+
 //Var realisation for SBSH
 use std::env;
 

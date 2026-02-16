@@ -1,3 +1,6 @@
+// Copyright (C) <2026> <Bogdan Yachmenv>
+// SPDX-License-Identifier: GPL-3.0/
+
 use libc::{WEXITSTATUS, WIFEXITED, waitpid, fork, execvp};
 use shlex::split;
 use std::ffi::CString;
@@ -5,72 +8,64 @@ use std::ptr;
 use std::env;
 use std::path::Path;
 use std::io::{self, Write};
-
+mod aliases;
+mod print;
+mod small_utils;
+mod var;
 
 pub fn handle_builtin(line: &str) {
-    let args: Vec<String> = match split(line) {
-        Some(a) => a,
-        None => {
-            eprintln!("Command parsing error");
+    const MAX_EXPANSION: u32 = 10;  // защита от циклических алиасов
+    let mut current_line = line.to_string();
+    let mut expansion_count = 0;
+
+    loop {
+        let args: Vec<String> = match split(&current_line) {
+            Some(a) => a,
+            None => {
+                eprintln!("Command parsing error");
+                return;
+            }
+        };
+        if args.is_empty() {
             return;
         }
-    };
-    if args.is_empty() {
-        return;
-    }
 
-    match args[0].as_str() {
-        "print" => {
-            if args.len() > 1 {
-                println!("{}", args[1]);
-            } else {
-                println!(); 
-            }
-        }
-        "print-var" => {
-            if args.len() < 2 {
-                eprintln!("print-var: variable name required");
+        if let Some(alias_cmd) = aliases::get(&args[0]) {
+            if expansion_count >= MAX_EXPANSION {
+                eprintln!("Alias expansion too deep (possible cycle)");
                 return;
             }
-            match env::var(&args[1]) {
-                Ok(val) => println!("{}", val),
-                Err(e) => eprintln!("varriable {}: {}", args[1], e),
-            }
-        }
-        "cd" => {
-            let target = if args.len() >= 2 {
-                args[1].clone()
+            let rest = if args.len() > 1 {
+                format!(" {}", args[1..].join(" "))
             } else {
-                // без аргументов — переходим в HOME
-                env::var("HOME").unwrap_or_else(|_| "/".to_string())
+                String::new()
             };
-            if let Err(e) = env::set_current_dir(Path::new(&target)) {
-                eprintln!("cd: {}: {}", target, e);
+            current_line = format!("{}{}", alias_cmd, rest);
+            expansion_count += 1;
+            continue;
+        }
+-
+        match args[0].as_str() {
+            "print" => {
+                print::print(&args);
+            }
+            "cd" => {
+                small_utils::cd(&args);
+            }
+            "var" => {
+                var::handle_var(&args[1..]);
+            }
+            "exit" => {
+                small_utils::exit(&args);
+            }
+            "clr" => {
+                small_utils::clr();
+            }
+            _ => {
+                system_run(args);
             }
         }
-        "var" => {
-            if args.len() < 2 {
-                eprintln!("var: key=value required");
-                return;
-            }
-            if let Some((key, value)) = args[1].split_once('=') {
-                unsafe {env::set_var(key, value);}
-            } else {
-                eprintln!("var: argument must be in key=value format");
-            }
-        }
-        "exit" => {
-            let code = args.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
-            std::process::exit(code);
-        }
-        "clr" => {
-            print!("\x1B[2J\x1B[H");
-            io::stdout().flush().unwrap();
-        }
-        _ => {
-            
-            system_run(args);
-        }
+        break;
     }
 }
 

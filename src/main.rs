@@ -1,3 +1,6 @@
+// Copyright (C) <2026> <Bogdan Yachmenv>
+// SPDX-License-Identifier: GPL-3.0/
+
 mod cmd_runner;
 use rustyline::DefaultEditor;
 use rustyline::error::ReadlineError;
