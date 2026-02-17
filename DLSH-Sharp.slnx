@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="DLSH-Sharp/DLSH-Sharp.csproj" />
+  <Project Path="DLSH.Tests/DLSH.Tests.csproj" Id="4aca4a42-9bf9-48e8-a2b1-0bc4134d3a88" />
 </Solution>

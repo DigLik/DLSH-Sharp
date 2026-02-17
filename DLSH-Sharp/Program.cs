@@ -3,14 +3,18 @@
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 
-var globals = new ShellGlobals();
+var aliasService = new AliasService();
+var dispatcher = new CommandDispatcher(aliasService);
+
+var globals = new ShellGlobals(dispatcher, aliasService);
+
 var home = Environment.GetEnvironmentVariable("HOME")
            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 var configPath = Path.Combine(home, ".dlshrc.csx");
 var historyPath = Path.Combine(home, ".dlsh_history");
 
 var scriptOptions = ScriptOptions.Default
-    .WithImports("System", "System.IO", "System.Linq")
+    .WithImports("System", "System.IO", "System.Linq", "DLSH.Core")
     .WithReferences(typeof(ShellGlobals).Assembly);
 
 if (File.Exists(configPath))
@@ -36,7 +40,7 @@ if (File.Exists(historyPath))
     ReadLine.AddHistory(File.ReadAllLines(historyPath));
 }
 
-Console.WriteLine("Welcome to DLSH-Sharp (C# 14 Edition)");
+Console.WriteLine("Welcome to DLSH-Sharp (Modular Edition)");
 
 while (true)
 {
@@ -45,6 +49,13 @@ while (true)
 
     var ps1 = Environment.GetEnvironmentVariable("PS1") ?? "$ ";
     string input = ReadLine.Read(ps1);
+
+    if (!string.IsNullOrWhiteSpace(input))
+    {
+        var history = ReadLine.GetHistory();
+        if (history.Count == 0 || history[^1] != input)
+            ReadLine.AddHistory(input);
+    }
 
     bool handledByHook = false;
     if (globals.OnInput != null)
@@ -58,8 +69,7 @@ while (true)
     }
 
     if (!handledByHook)
-        if (globals.OnInput == null)
-            CommandRunner.HandleCommand(input);
+        dispatcher.Dispatch(input);
 
     File.WriteAllLines(historyPath, ReadLine.GetHistory());
 }
