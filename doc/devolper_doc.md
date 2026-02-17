@@ -13,7 +13,7 @@ This document is created to simplify understanding of the project for new contri
 - `/src/cmd_runner/aliases.rs` – Implementation of aliases.
 - `/src/cmd_runner/small_utils.rs` – Implementation of three small commands: `cd`, `exit`, and `clr`.
 
-## Project Conventions
+## Project Conventionsw
 
 We use the following naming conventions:
 - `my_var`

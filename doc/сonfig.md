@@ -128,5 +128,5 @@ The functions are grouped by category.
 
 SBSH is a single-threaded program, therefore:
 - Infinite loops block the program; instead, use the `repeat` hook or provide a way to exit them.
-- Long calculations in the `repeat` hook and the functions/files it calls are not recommended; avoid complex computations.
+- Long calculations in the `repeat` hook and the functions/fwiles it calls are not recommended; avoid complex computations.
 - Without the `.sbshrc.rhai` file in the home directory and the `PS1` variable declared in it, SBSH will not start.
