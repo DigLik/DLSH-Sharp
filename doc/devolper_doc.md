@@ -1,29 +1,16 @@
-# Technical Documentation for SBSH
+# Техническая документация разработчика DLSH-Sharp
 
-This document is created to simplify understanding of the project for new contributors and those who wish to study its source code.
+## Структура проекта
+- `Program.cs` — Точка входа. Отвечает за инициализацию .NET Runtime, загрузку Roslyn и основной цикл REPL.
+- `Core/ShellGlobals.cs` — Глобальный контекст для скриптов. Здесь определены все методы, которые "видит" пользователь в `.csx` файлах.
+- `Core/CommandRunner.cs` — Ядро обработки команд. Содержит логику встроенных функций и механизм запуска внешних процессов через `ProcessStartInfo`.
+- `DLSH-Sharp.csproj` — Конфигурация проекта и зависимостей NuGet.
 
-## Project Structure
+## Соглашения по коду
+- Используется пространство имен `DLSH`.
+- Весь код должен соответствовать стандартам C# 14.
+- Для расширения API оболочки новые методы следует добавлять в `ShellGlobals.cs`.
+- Команды, требующие прямого взаимодействия с ОС, реализуются в `CommandRunner.cs`.
 
-- `/src/main.rs` – Main file; handles configuration processing, startup, and input retrieval.
-- `/src/cmd_runner.rs` – Main file of the `cmd_runner` module; handles command processing and built‑in commands.
-- `/src/api.rs` – API that glues libraries into a single interface to simplify refactoring and code expansion.
-- `/src/rhai_api.rs` – API for working with Rhai configurations; contains the Rhai engine initializer function and registration of functions for Rhai configs.
-- `/src/cmd_runner/print.es` – Implementation of the `print` built‑in command.
-- `/src/cmd_runner/var.rs` – Implementation of the `var` built‑in command.
-- `/src/cmd_runner/aliases.rs` – Implementation of aliases.
-- `/src/cmd_runner/small_utils.rs` – Implementation of three small commands: `cd`, `exit`, and `clr`.
-
-## Project Conventionsw
-
-We use the following naming conventions:
-- `my_var`
-- `my_func`
-- `MY_CONST`
-- `my_module`
-- `MyStruct`
-- `MY_GLOBAL_VAR`
-
-Comments are written in English.  
-Use comments in places that are difficult to read without them.  
-Do not overuse pointers.  
-Use `String` instead of `&str` in function arguments and return values.
+## Особенности реализации
+В отличие от классических оболочек, DLSH-Sharp не использует системный вызов `fork`. Вместо этого запуск внешних программ осуществляется через управляемый API .NET, что обеспечивает кроссплатформенную стабильность.

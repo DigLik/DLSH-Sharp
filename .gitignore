@@ -1,0 +1,12 @@
+## .NET
+bin/
+obj/
+out/
+
+## Visual Studio / JetBrains Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates

@@ -1,45 +1,19 @@
-# SBSH – Simple Bogdan's Shell
+# DLSH-Sharp – DigLik's Shell
 
-SBSH is a minimal Unix‑like shell written in Rust. It supports executing external programs, built‑in commands, environment variable manipulation, basic arithmetic expressions, and command separation with semicolons.
+DLSH-Sharp — это современная минималистичная командная оболочка, написанная на C# 14 (.NET 10 LTS). Проект ориентирован на гибкость и расширяемость за счет использования C# Scripting API для конфигурации и плагинов.
 
-Full documentation is available in the [`/doc`](doc/) directory.
-The project's philosophy is brief:
-"Do what you want, however you want, but be careful."
-## License
+## Основные возможности
+- Выполнение системных программ и встроенных команд.
+- Полноценный скриптинг на C# (.csx) для автоматизации и настройки.
+- Интеграция с Git для отображения состояния репозиториев в реальном времени.
+- Продвинутая работа с переменными окружения и математическими выражениями.
+- Поддержка алиасов и цепочек команд через разделитель `;`.
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+## Лицензия
+Проект распространяется под лицензией GNU General Public License v3.0. Это гарантирует пользователям свободу запуска, изучения, распространения и изменения программного обеспечения.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program.
-
-## Using libraries
-
-This project uses the following libraries (all are licensed under permissive terms compatible with GPLv3):
-
-- **libc** (version 0.2.182) - license: MIT OR Apache-2.0  
-  Author: The Rust Project Developers
-
-- **shlex** (version 1.3) - license: MIT  
-  Author: comex <comexk@gmail.com>
-
-- **rustyline** (version 17.0.2) - license: MIT  
-  Author: Katsu Kawakami
-
-- **rhai** (version 1.24.0) - license: MIT OR Apache-2.0  
-  Author: Rhai Foundation
-
-- **whoami** (version 0.5) - license: MIT OR Apache-2.0  
-  Author: Artyom Pavlov [and others]
-
-- **lazy_static** (version 1.5.0) - license: MIT OR Apache-2.0  
-  Author: Marvin Löbel
-
-- **git2** (version 0.20) - license: MIT OR Apache-2.0  
-  Author: Alex Crichton and contributors
-
-- **iridescent** (version 0.2.1) - license: MIT  
-  Author: Owen G. De Long <owen.g.delong@gmail.com>
-
-- **shh** (version 1.0) - license: MIT OR Apache-2.0  
-  Author: Steven Roose
+## Зависимости
+Проект использует следующие современные библиотеки:
+- **Microsoft.CodeAnalysis.CSharp.Scripting**: Движок для выполнения C# скриптов.
+- **LibGit2Sharp**: Высокоуровневая интеграция с Git.
+- **ReadLine**: Компонент для удобного ввода с поддержкой истории.
